@@ -6,63 +6,79 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func change(chatid int64, text string, keyboard tgbotapi.ReplyKeyboardMarkup, bot *tgbotapi.BotAPI) {
-	msg := tgbotapi.NewMessage(chatid, text)
-	msg.ReplyMarkup = keyboard
-	bot.Send(msg)
+func change(p PsyParams) {
+	msg := tgbotapi.NewMessage(p.chatid, p.text)
+	msg.ReplyMarkup = p.keyboard
+	p.bot.Send(msg)
 }
 
-func typeTest(chatid int64, text string, bot *tgbotapi.BotAPI) (typeT string) {
+func typeTest(p PsyParams) (typeT string) {
 
-	switch text {
+	switch p.text {
 	case "Тревога":
 		typeT = "anxiety"
-		change(chatid, "Выберите шкалу тревоги", anxietyKeyboard, bot)
+		p.text = "Выберите шкалу тревоги"
+		p.keyboard = anxietyKeyboard
 
 	case "Депрессия":
 		typeT = "depression"
-		change(chatid, "Выберите шкалу депрессии", anxietyKeyboard, bot) //!!
-	}
+		p.text = "Выберите шкалу депрессии"
+		p.keyboard = anxietyKeyboard //!!
 
+	}
+	change(p)
 	return typeT
 }
 
-func anxiety(chatid int64, text string, bot *tgbotapi.BotAPI) (nameT string, numberQ int) {
-	switch text {
+func anxiety(p PsyParams) (test PsyTest) {
+
+	switch p.text {
 	case "Гамильтона":
-		nameT = "hamilton"
-		numberQ = 13
-		change(chatid, aboutHamilton, hamiltonSymptomsKeyboard, bot)
-		hamilton(chatid, bot, 0)
+		test = Hamilton
+		p.text = aboutHamilton
+
+	case "Бека":
+		test = BeckAnx
+		p.text = aboutBeckAnx
+
 	}
-	return nameT, numberQ
+	p.keyboard = startKeyboard
+	change(p)
+	return test
 }
 
-func hamilton(chatid int64, bot *tgbotapi.BotAPI, i int) {
-	change(chatid, questionsHamilton[i], hamiltonSymptomsKeyboard, bot)
+func numberQuestionTest(p PsyParams, pT PsyTest, i int) {
+	p.text = pT.questions[i]
+	p.keyboard = pT.keyboard
+	change(p)
 }
 
-func psyTest(chatid int64, bot *tgbotapi.BotAPI, nameT string, numberQ int) {
-	switch nameT {
-	case "hamilton":
-		hamilton(chatid, bot, numberQ)
-	}
-}
-
-func result(score int, nameT string) (resultText string) {
-
-	switch nameT {
-
-	case "hamilton":
-		switch {
-		case score <= 17:
-			resultText = strconv.Itoa(score) + " баллов. " + resultHamilton[17]
-		case score <= 24 && score > 17:
-			resultText = strconv.Itoa(score) + " баллов. " + resultHamilton[24]
-		case score >= 25:
-			resultText = strconv.Itoa(score) + " баллов. " + resultHamilton[25]
+func countScore(pT PsyTest, text string) (score int) {
+	for key, value := range pT.pointTest {
+		if text == key {
+			score = value
 		}
-
 	}
+	return score
+}
+
+func result(score int, pT PsyTest) (resultText string) {
+
+	var resT string
+
+	var keyArr []int
+	for key := range pT.resultTest {
+		keyArr = append(keyArr, key)
+	}
+
+	for ind, value := range keyArr {
+		if (score <= value && ind == 0) || (score >= value && ind == len(keyArr)-1) {
+			resT = resultHamilton[value]
+
+		} else if score <= keyArr[ind] && score > keyArr[ind-1] {
+			resT = resultHamilton[keyArr[ind]]
+		}
+	}
+	resultText = "Суммарное количество баллов: " + strconv.Itoa(score) + ". " + resT
 	return resultText
 }

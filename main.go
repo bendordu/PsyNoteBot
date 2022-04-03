@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	bot, err := tgbotapi.NewBotAPI("5239188791:AAFKHNX1HqkSNJbbqu9amon8_Fm-v4Aws_w")
+	bot, err := tgbotapi.NewBotAPI(BOTAPI)
 	if err != nil {
 		log.Panic(err)
 	}
@@ -19,12 +19,11 @@ func main() {
 
 	updates := bot.GetUpdatesChan(u)
 
-	var chatId int64
-	var level int = 0
-	var typeT, nameT string
-	score := 0
-	number := 0
-	numberQ := 0
+	level, score, number := 0, 0, 0 //Уровень выбора, Итоговый балл, Номер вопроса
+	var typeT string                //Ключи, по которым осуществяется переход
+
+	psyParams := PsyParams{bot: bot}
+	var pTest PsyTest
 
 	for update := range updates {
 
@@ -32,49 +31,43 @@ func main() {
 			continue
 		}
 
-		chatId = update.Message.Chat.ID
+		psyParams.chatid = update.Message.Chat.ID
 		text := update.Message.Text
 
 		//Нулевой уровень 0 - старт
-		if text == "/start" {
+		if text == "/start" || text == "Вернуться к началу" {
 			level = 0
-			change(chatId, "Выберите тип", testKeyboard, bot)
-			level++
-
-		} else if text == "Вернуться к началу" {
-			level = 0
-			change(chatId, "Выберите тип", testKeyboard, bot)
+			psyParams.keyboard = testKeyboard
+			psyParams.text = "Выберите тип"
+			change(psyParams)
 			level++
 
 		} else if level == 1 { //Переходим на следующий уровень 1 - выбор типа тестов
-
 			level++
-			typeT = typeTest(chatId, text, bot)
+			psyParams.text = text
+			typeT = typeTest(psyParams)
 
 		} else if level == 2 { //Выбор шкалы - 2 уровень
-
 			level++
+			psyParams.text = text
 			switch typeT {
 			case "anxiety":
-				nameT, numberQ = anxiety(chatId, text, bot)
+				pTest = anxiety(psyParams)
 			}
 
-		} else if level == 3 {
+		} else if level == 3 { //Подсчет баллов при каждом новом выборе
 
-			for key, value := range point {
-				if text == key {
-					score += value
-				}
-			}
-			if number < numberQ {
+			score += countScore(pTest, text)
+
+			if number < pTest.numberQ {
+				numberQuestionTest(psyParams, pTest, number)
 				number++
-				psyTest(chatId, bot, nameT, number)
+
 			} else {
-				textResult := result(score, nameT)
-				change(chatId, textResult, backKeyboard, bot)
-				score = 0
-				number = 0
-				level = 0
+				psyParams.keyboard = backKeyboard
+				psyParams.text = result(score, pTest)
+				change(psyParams)
+				score, number, level = 0, 0, 0
 			}
 
 		}

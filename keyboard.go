@@ -38,6 +38,20 @@ var hamiltonSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	),
 )
 
+var beckAnxSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Совсем не беспокоил"),
+		tgbotapi.NewKeyboardButton("Слегка. Не слишком меня беспокоил"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Умеренно. Это было неприятно, но я мог это переносить"),
+		tgbotapi.NewKeyboardButton("Очень сильно. Я с трудом мог это выносить"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+	),
+)
+
 var startKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Пройти тест"),
