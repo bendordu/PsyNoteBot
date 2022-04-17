@@ -32,8 +32,7 @@ type TestData struct {
 	NameRus,
 	NameEng,
 	About string
-	Questions         []string
-	QuantityQuestions int
-	Point             map[string]int
-	Result            map[int]string
+	Questions []string
+	Point     map[string]int
+	Result    map[int]string
 }

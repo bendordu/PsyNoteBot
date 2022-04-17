@@ -5,12 +5,22 @@ import (
 
 	"log"
 
+	"fmt"
+
 	"io/ioutil"
 
 	"encoding/json"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
+
+func readFile(path string) (data []byte) {
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return data
+}
 
 func change(p PsyParams) {
 	msg := tgbotapi.NewMessage(p.chatid, p.text)
@@ -22,7 +32,7 @@ func typeTest(p PsyParams, typesTest TypesTest) {
 
 	for _, typeTest := range typesTest.TestTypes {
 		if typeTest.NameRus == p.text {
-			p.text = "Выберите шкалу " + typeTest.Text
+			p.text = fmt.Sprintf("Выберите шкалу %s", typeTest.Text)
 			p.keyboard = typeTestKeyboard[typeTest.NameEng]
 		}
 	}
@@ -40,10 +50,7 @@ func testDetails(p PsyParams, typesTest TypesTest) (testData TestData) {
 		}
 	}
 
-	data, err := ioutil.ReadFile(path)
-	if err != nil {
-		log.Fatal(err)
-	}
+	data := readFile(path)
 
 	if err := json.Unmarshal(data, &testData); err != nil {
 		log.Fatal(err)
@@ -56,7 +63,7 @@ func testDetails(p PsyParams, typesTest TypesTest) (testData TestData) {
 }
 
 func numberQuestionTest(p PsyParams, testData TestData, i int) {
-	p.text = testData.Questions[i]
+	p.text = fmt.Sprintf("%s. %s", strconv.Itoa(i+1), testData.Questions[i])
 	p.keyboard = typeTestKeyboard[testData.NameEng]
 	change(p)
 }
@@ -87,6 +94,6 @@ func result(score int, testData TestData) (resultText string) {
 			resT = testData.Result[keyArr[ind]]
 		}
 	}
-	resultText = "Суммарное количество баллов: " + strconv.Itoa(score) + ". " + resT
+	resultText = fmt.Sprintf("Суммарное количество баллов: %s. %s", strconv.Itoa(score), resT)
 	return resultText
 }

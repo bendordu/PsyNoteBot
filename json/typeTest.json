@@ -17,6 +17,16 @@
 				"path": "json/anxiety/spilbergHanin.json",
 				"testName": "spilbergHanin",
                 "testNameRus": "Спилберга-Ханина"
+			},
+            {
+				"path": "json/anxiety/shihan.json",
+				"testName": "shihan",
+                "testNameRus": "Шихана"
+			},
+            {
+				"path": "json/anxiety/socialanx.json",
+				"testName": "socialanx",
+                "testNameRus": "Социофобии"
 			}
         ]
 		},

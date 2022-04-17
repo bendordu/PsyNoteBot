@@ -3,8 +3,6 @@ package main
 import (
 	"log"
 
-	"io/ioutil"
-
 	"encoding/json"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -26,13 +24,12 @@ func main() {
 	level, score, number := 0, 0, 0 //Уровень выбора, Итоговый балл, Номер вопроса
 
 	psyParams := PsyParams{bot: bot}
-	var testData TestData
-	var typesTest TypesTest
+	var (
+		testData  TestData
+		typesTest TypesTest
+	)
 
-	data, err := ioutil.ReadFile("json/typeTest.json")
-	if err != nil {
-		log.Fatal(err)
-	}
+	data := readFile("json/typeTest.json")
 
 	if err := json.Unmarshal(data, &typesTest); err != nil {
 		log.Fatal(err)
@@ -69,7 +66,7 @@ func main() {
 
 			score += countScore(testData, text)
 
-			if number < testData.QuantityQuestions {
+			if number < len(testData.Questions) {
 				numberQuestionTest(psyParams, testData, number)
 				number++
 

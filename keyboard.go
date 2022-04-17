@@ -16,7 +16,10 @@ var anxietyKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Гамильтона"),
 		tgbotapi.NewKeyboardButton("Бека"),
-		tgbotapi.NewKeyboardButton("Спилбергера-Ханина"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Шихана"),
+		tgbotapi.NewKeyboardButton("Социофобии"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Вернуться к началу"),
@@ -46,6 +49,35 @@ var beckAnxSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Умеренно. Это было неприятно, но я мог это переносить"),
 		tgbotapi.NewKeyboardButton("Очень сильно. Я с трудом мог это выносить"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+	),
+)
+
+var shihanSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Нет"),
+		tgbotapi.NewKeyboardButton("Немного"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Умеренно"),
+		tgbotapi.NewKeyboardButton("Сильно"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Крайне сильно"),
+		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+	),
+)
+
+var socialanxSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Нет"),
+		tgbotapi.NewKeyboardButton("Скорее нет"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Скорее да"),
+		tgbotapi.NewKeyboardButton("Да"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Вернуться к началу"),
