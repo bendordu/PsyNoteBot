@@ -49,20 +49,20 @@ func testDetails(p PsyParams, typesTest TypesTest) (testData TestData) {
 		log.Fatal(err)
 	}
 
-	p.text = testData.TestAbout
+	p.text = testData.About
 	p.keyboard = startKeyboard
 	change(p)
 	return testData
 }
 
 func numberQuestionTest(p PsyParams, testData TestData, i int) {
-	p.text = testData.TestQuestions[i]
-	p.keyboard = typeTestKeyboard[testData.TestNameEng]
+	p.text = testData.Questions[i]
+	p.keyboard = typeTestKeyboard[testData.NameEng]
 	change(p)
 }
 
 func countScore(testData TestData, text string) (score int) {
-	for key, value := range testData.TestPoint {
+	for key, value := range testData.Point {
 		if text == key {
 			score = value
 		}
@@ -75,16 +75,16 @@ func result(score int, testData TestData) (resultText string) {
 	var resT string
 
 	var keyArr []int
-	for key := range testData.TestResult {
+	for key := range testData.Result {
 		keyArr = append(keyArr, key)
 	}
 
 	for ind, value := range keyArr {
 		if (score <= value && ind == 0) || (score >= value && ind == len(keyArr)-1) {
-			resT = testData.TestResult[value]
+			resT = testData.Result[value]
 
 		} else if score <= keyArr[ind] && score > keyArr[ind-1] {
-			resT = testData.TestResult[keyArr[ind]]
+			resT = testData.Result[keyArr[ind]]
 		}
 	}
 	resultText = "Суммарное количество баллов: " + strconv.Itoa(score) + ". " + resT

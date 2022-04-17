@@ -4,9 +4,19 @@
 			"nameRus": "Тревога",
             "text": "тревоги",
 			"tests": [{
-				"path": "anxiety/hamilton.json",
+				"path": "json/anxiety/hamilton.json",
 				"testName": "hamilton",
                 "testNameRus": "Гамильтона"
+			},
+            {
+				"path": "json/anxiety/beckanx.json",
+				"testName": "beckanx",
+                "testNameRus": "Бека"
+			},
+            {
+				"path": "json/anxiety/spilbergHanin.json",
+				"testName": "spilbergHanin",
+                "testNameRus": "Спилберга-Ханина"
 			}
         ]
 		},

@@ -29,11 +29,11 @@ type TypesTest struct {
 }
 
 type TestData struct {
-	TtestNameRus,
-	TestNameEng,
-	TestAbout string
-	TestQuestions     []string
+	NameRus,
+	NameEng,
+	About string
+	Questions         []string
 	QuantityQuestions int
-	TestPoint         map[string]int
-	TestResult        map[int]string
+	Point             map[string]int
+	Result            map[int]string
 }

@@ -29,7 +29,7 @@ func main() {
 	var testData TestData
 	var typesTest TypesTest
 
-	data, err := ioutil.ReadFile("typeTest.json")
+	data, err := ioutil.ReadFile("json/typeTest.json")
 	if err != nil {
 		log.Fatal(err)
 	}
