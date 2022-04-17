@@ -3,6 +3,12 @@ package main
 import (
 	"strconv"
 
+	"log"
+
+	"io/ioutil"
+
+	"encoding/json"
+
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
@@ -12,49 +18,51 @@ func change(p PsyParams) {
 	p.bot.Send(msg)
 }
 
-func typeTest(p PsyParams) (typeT string) {
+func typeTest(p PsyParams, typesTest TypesTest) {
 
-	switch p.text {
-	case "Тревога":
-		typeT = "anxiety"
-		p.text = "Выберите шкалу тревоги"
-		p.keyboard = anxietyKeyboard
-
-	case "Депрессия":
-		typeT = "depression"
-		p.text = "Выберите шкалу депрессии"
-		p.keyboard = anxietyKeyboard //!!
-
+	for _, typeTest := range typesTest.TestTypes {
+		if typeTest.NameRus == p.text {
+			p.text = "Выберите шкалу " + typeTest.Text
+			p.keyboard = typeTestKeyboard[typeTest.NameEng]
+		}
 	}
 	change(p)
-	return typeT
 }
 
-func anxiety(p PsyParams) (test PsyTest) {
+func testDetails(p PsyParams, typesTest TypesTest) (testData TestData) {
 
-	switch p.text {
-	case "Гамильтона":
-		test = Hamilton
-		p.text = aboutHamilton
-
-	case "Бека":
-		test = BeckAnx
-		p.text = aboutBeckAnx
-
+	var path string
+	for _, typeTest := range typesTest.TestTypes {
+		for _, test := range typeTest.Tests {
+			if test.TestNameRus == p.text {
+				path = test.Path
+			}
+		}
 	}
+
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := json.Unmarshal(data, &testData); err != nil {
+		log.Fatal(err)
+	}
+
+	p.text = testData.TestAbout
 	p.keyboard = startKeyboard
 	change(p)
-	return test
+	return testData
 }
 
-func numberQuestionTest(p PsyParams, pT PsyTest, i int) {
-	p.text = pT.questions[i]
-	p.keyboard = pT.keyboard
+func numberQuestionTest(p PsyParams, testData TestData, i int) {
+	p.text = testData.TestQuestions[i]
+	p.keyboard = typeTestKeyboard[testData.TestNameEng]
 	change(p)
 }
 
-func countScore(pT PsyTest, text string) (score int) {
-	for key, value := range pT.pointTest {
+func countScore(testData TestData, text string) (score int) {
+	for key, value := range testData.TestPoint {
 		if text == key {
 			score = value
 		}
@@ -62,21 +70,21 @@ func countScore(pT PsyTest, text string) (score int) {
 	return score
 }
 
-func result(score int, pT PsyTest) (resultText string) {
+func result(score int, testData TestData) (resultText string) {
 
 	var resT string
 
 	var keyArr []int
-	for key := range pT.resultTest {
+	for key := range testData.TestResult {
 		keyArr = append(keyArr, key)
 	}
 
 	for ind, value := range keyArr {
 		if (score <= value && ind == 0) || (score >= value && ind == len(keyArr)-1) {
-			resT = resultHamilton[value]
+			resT = testData.TestResult[value]
 
 		} else if score <= keyArr[ind] && score > keyArr[ind-1] {
-			resT = resultHamilton[keyArr[ind]]
+			resT = testData.TestResult[keyArr[ind]]
 		}
 	}
 	resultText = "Суммарное количество баллов: " + strconv.Itoa(score) + ". " + resT

@@ -3,6 +3,10 @@ package main
 import (
 	"log"
 
+	"io/ioutil"
+
+	"encoding/json"
+
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
@@ -20,10 +24,19 @@ func main() {
 	updates := bot.GetUpdatesChan(u)
 
 	level, score, number := 0, 0, 0 //Уровень выбора, Итоговый балл, Номер вопроса
-	var typeT string                //Ключи, по которым осуществяется переход
 
 	psyParams := PsyParams{bot: bot}
-	var pTest PsyTest
+	var testData TestData
+	var typesTest TypesTest
+
+	data, err := ioutil.ReadFile("typeTest.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := json.Unmarshal(data, &typesTest); err != nil {
+		log.Fatal(err)
+	}
 
 	for update := range updates {
 
@@ -36,36 +49,33 @@ func main() {
 
 		//Нулевой уровень 0 - старт
 		if text == "/start" || text == "Вернуться к началу" {
-			level = 0
+			score, number, level = 0, 0, 0
 			psyParams.keyboard = testKeyboard
 			psyParams.text = "Выберите тип"
 			change(psyParams)
-			level++
+			level = 1
 
 		} else if level == 1 { //Переходим на следующий уровень 1 - выбор типа тестов
-			level++
+			level = 2
 			psyParams.text = text
-			typeT = typeTest(psyParams)
+			typeTest(psyParams, typesTest)
 
 		} else if level == 2 { //Выбор шкалы - 2 уровень
-			level++
+			level = 3
 			psyParams.text = text
-			switch typeT {
-			case "anxiety":
-				pTest = anxiety(psyParams)
-			}
+			testData = testDetails(psyParams, typesTest)
 
 		} else if level == 3 { //Подсчет баллов при каждом новом выборе
 
-			score += countScore(pTest, text)
+			score += countScore(testData, text)
 
-			if number < pTest.numberQ {
-				numberQuestionTest(psyParams, pTest, number)
+			if number < testData.QuantityQuestions {
+				numberQuestionTest(psyParams, testData, number)
 				number++
 
 			} else {
 				psyParams.keyboard = backKeyboard
-				psyParams.text = result(score, pTest)
+				psyParams.text = result(score, testData)
 				change(psyParams)
 				score, number, level = 0, 0, 0
 			}

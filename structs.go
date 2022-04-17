@@ -4,15 +4,6 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-type PsyTest struct {
-	typeT, nameT string
-	numberQ      int //Всего воспросов в тесте
-	questions    []string
-	pointTest    map[string]int
-	keyboard     tgbotapi.ReplyKeyboardMarkup
-	resultTest   map[int]string
-}
-
 type PsyParams struct {
 	chatid   int64
 	text     string
@@ -20,9 +11,29 @@ type PsyParams struct {
 	bot      *tgbotapi.BotAPI
 }
 
-/*type PsyParamsChange struct {
-	text     string
-	keyboard tgbotapi.ReplyKeyboardMarkup
+type Test struct {
+	Path,
+	TestName,
+	TestNameRus string
 }
 
-var Level1Params = PsyParamsChange{"Выберите тип", testKeyboard}*/
+type TypeTest struct {
+	NameEng,
+	NameRus,
+	Text string
+	Tests []Test
+}
+
+type TypesTest struct {
+	TestTypes []TypeTest
+}
+
+type TestData struct {
+	TtestNameRus,
+	TestNameEng,
+	TestAbout string
+	TestQuestions     []string
+	QuantityQuestions int
+	TestPoint         map[string]int
+	TestResult        map[int]string
+}

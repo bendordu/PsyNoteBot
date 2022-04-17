@@ -1,0 +1,22 @@
+{
+	"testTypes": [{
+			"nameEng": "anxiety",
+			"nameRus": "Тревога",
+            "text": "тревоги",
+			"tests": [{
+				"path": "anxiety/hamilton.json",
+				"testName": "hamilton",
+                "testNameRus": "Гамильтона"
+			}
+        ]
+		},
+		{
+			"nameEng": "depression",
+			"nameRus": "Депрессия",
+			"tests": [{
+				"path": "anxiety/hamilton.json",
+				"testName": "hamilton"
+			}]
+		}
+	]
+}
