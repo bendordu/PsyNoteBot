@@ -27,15 +27,27 @@
 				"path": "json/anxiety/socialanx.json",
 				"testName": "socialanx",
                 "testNameRus": "Социофобии"
+			},
+			{
+				"path": "json/anxiety/teylor.json",
+				"testName": "teylor",
+                "testNameRus": "Тейлора"
 			}
         ]
 		},
 		{
 			"nameEng": "depression",
 			"nameRus": "Депрессия",
+			"text": "депрессии",
 			"tests": [{
-				"path": "anxiety/hamilton.json",
-				"testName": "hamilton"
+				"path": "json/depression/zung.json",
+				"testName": "zung",
+				"testNameRus": "Занга"
+			},
+			{
+				"path": "json/depression/geriatric.json",
+				"testName": "geriatric",
+				"testNameRus": "Гериатрическая"
 			}]
 		}
 	]

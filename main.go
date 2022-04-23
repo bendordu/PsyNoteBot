@@ -64,7 +64,9 @@ func main() {
 
 		} else if level == 3 { //Подсчет баллов при каждом новом выборе
 
-			score += countScore(testData, text)
+			if number != 0 {
+				score += countScore(testData, text, number)
+			}
 
 			if number < len(testData.Questions) {
 				numberQuestionTest(psyParams, testData, number)

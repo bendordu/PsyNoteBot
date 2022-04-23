@@ -4,6 +4,19 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
+var startKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Пройти тест"),
+		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+	),
+)
+
+var backKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+	),
+)
+
 var testKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Тревога"),
@@ -22,9 +35,24 @@ var anxietyKeyboard = tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButton("Социофобии"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Тейлора"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Вернуться к началу"),
 	),
 )
+
+var depressionKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Занга"),
+		tgbotapi.NewKeyboardButton("Гериатрическая"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+	),
+)
+
+/*------------------------------------------------------------------*/
 
 var hamiltonSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
@@ -44,11 +72,15 @@ var hamiltonSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 var beckAnxSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Совсем не беспокоил"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Слегка. Не слишком меня беспокоил"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Умеренно. Это было неприятно, но я мог это переносить"),
-		tgbotapi.NewKeyboardButton("Очень сильно. Я с трудом мог это выносить"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Умеренно. Это было неприятно, но я мог это переносить"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Вернуться к началу"),
@@ -84,14 +116,35 @@ var socialanxSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	),
 )
 
-var startKeyboard = tgbotapi.NewReplyKeyboard(
+var teylorSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Пройти тест"),
+		tgbotapi.NewKeyboardButton("Нет"),
+		tgbotapi.NewKeyboardButton("Да"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Вернуться к началу"),
 	),
 )
 
-var backKeyboard = tgbotapi.NewReplyKeyboard(
+var zungSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Никогда или изредка"),
+		tgbotapi.NewKeyboardButton("Иногда"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Часто"),
+		tgbotapi.NewKeyboardButton("Почти всегда или постоянно"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+	),
+)
+
+var geriatricSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Нет"),
+		tgbotapi.NewKeyboardButton("Да"),
+	),
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Вернуться к началу"),
 	),

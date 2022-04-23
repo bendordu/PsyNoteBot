@@ -33,6 +33,10 @@ type TestData struct {
 	NameEng,
 	About string
 	Questions []string
-	Point     map[string]int
-	Result    map[int]string
+	//Point      map[string]int
+	PointText  []string
+	PointInt   []int
+	ResultText []string
+	ResultSum  []int
+	Inverse    []int
 }

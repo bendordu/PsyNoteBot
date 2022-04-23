@@ -68,10 +68,24 @@ func numberQuestionTest(p PsyParams, testData TestData, i int) {
 	change(p)
 }
 
-func countScore(testData TestData, text string) (score int) {
-	for key, value := range testData.Point {
-		if text == key {
-			score = value
+func countScore(testData TestData, text string, number int) (score int) {
+
+	inv := false
+	if len(testData.Inverse) != 0 {
+		for _, n := range testData.Inverse {
+			if number == n {
+				inv = true
+			}
+		}
+	}
+
+	for ind, value := range testData.PointText {
+		if text == value {
+			if inv == false {
+				score = testData.PointInt[ind]
+			} else {
+				score = testData.PointInt[len(testData.PointInt)-1-ind]
+			}
 		}
 	}
 	return score
@@ -81,17 +95,12 @@ func result(score int, testData TestData) (resultText string) {
 
 	var resT string
 
-	var keyArr []int
-	for key := range testData.Result {
-		keyArr = append(keyArr, key)
-	}
+	for ind, value := range testData.ResultSum {
+		if score <= value && ind == 0 {
+			resT = testData.ResultText[ind]
 
-	for ind, value := range keyArr {
-		if (score <= value && ind == 0) || (score >= value && ind == len(keyArr)-1) {
-			resT = testData.Result[value]
-
-		} else if score <= keyArr[ind] && score > keyArr[ind-1] {
-			resT = testData.Result[keyArr[ind]]
+		} else if score <= testData.ResultSum[ind] && score > testData.ResultSum[ind-1] {
+			resT = testData.ResultText[ind]
 		}
 	}
 	resultText = fmt.Sprintf("Суммарное количество баллов: %s. %s", strconv.Itoa(score), resT)
