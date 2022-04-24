@@ -21,9 +21,18 @@ var testKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Тревога"),
 		tgbotapi.NewKeyboardButton("Депрессия"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Интеллект"),
+		tgbotapi.NewKeyboardButton("Мотивация"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Коммуникация"),
+		tgbotapi.NewKeyboardButton("Эмоции, настроение"),
 	),
 )
+
+/*-----------------------------------------------------*/
 
 var anxietyKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
@@ -46,6 +55,36 @@ var depressionKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Занга"),
 		tgbotapi.NewKeyboardButton("Гериатрическая"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+	),
+)
+
+var motivationKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Потребность в достижении"),
+		tgbotapi.NewKeyboardButton("Мотивации одобрения"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+	),
+)
+
+var communicationKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Уровень общительности"),
+		tgbotapi.NewKeyboardButton("Самоконтроль в общении"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Аутизм"),
+		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+	),
+)
+
+var affectiveKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Алекситимии"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Вернуться к началу"),
@@ -116,7 +155,7 @@ var socialanxSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	),
 )
 
-var teylorSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
+/*var teylorSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Нет"),
 		tgbotapi.NewKeyboardButton("Да"),
@@ -124,7 +163,7 @@ var teylorSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Вернуться к началу"),
 	),
-)
+)*/
 
 var zungSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
@@ -140,7 +179,65 @@ var zungSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	),
 )
 
-var geriatricSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
+/*var geriatricSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Нет"),
+		tgbotapi.NewKeyboardButton("Да"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+	),
+)*/
+
+/*var motivationgoalSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Нет"),
+		tgbotapi.NewKeyboardButton("Да"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+	),
+)*/
+var selfcontrolSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Верно"),
+		tgbotapi.NewKeyboardButton("Неверно"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+	),
+)
+
+var alexitimiaSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Совершенно не согласен"),
+		tgbotapi.NewKeyboardButton("Скорее не согласен"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Ни то, ни другое"),
+		tgbotapi.NewKeyboardButton("Скорее согласен"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Совершенно согласен"),
+		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+	),
+)
+
+var autismSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Полностью согласен"),
+		tgbotapi.NewKeyboardButton("Скорее согласен"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Скорее не согласен"),
+		tgbotapi.NewKeyboardButton("Полностью не согласен"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+	),
+)
+
+var yesNoSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Нет"),
 		tgbotapi.NewKeyboardButton("Да"),

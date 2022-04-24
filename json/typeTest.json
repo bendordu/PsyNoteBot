@@ -49,6 +49,51 @@
 				"testName": "geriatric",
 				"testNameRus": "Гериатрическая"
 			}]
+		},
+		{
+			"nameEng": "motivation",
+			"nameRus": "Мотивация",
+			"text": "мотивации",
+			"tests": [{
+				"path": "json/motivation/motivationgoal.json",
+				"testName": "motivationgoal",
+				"testNameRus": "Потребность в достижении"
+			},
+			{
+				"path": "json/motivation/motivationapproval.json",
+				"testName": "motivationapproval",
+				"testNameRus": "Мотивации одобрения"
+			}]
+		},
+		{
+			"nameEng": "communication",
+			"nameRus": "Коммуникация",
+			"text": "коммуникации",
+			"tests": [{
+				"path": "json/communication/communicatelevel.json",
+				"testName": "communicatelevel",
+				"testNameRus": "Уровень общительности"
+			},
+			{
+				"path": "json/communication/selfcontrol.json",
+				"testName": "selfcontrol",
+				"testNameRus": "Самоконтроль в общении"
+			},
+			{
+				"path": "json/communication/autism.json",
+				"testName": "autism",
+				"testNameRus": "Аутизм"
+			}]
+		},
+		{
+			"nameEng": "affective",
+			"nameRus": "Эмоции, настроение",
+			"text": "эмоций, настроения",
+			"tests": [{
+				"path": "json/affective/alexitimia.json",
+				"testName": "alexitimia",
+				"testNameRus": "Алекситимии"
+			}]
 		}
 	]
 }
