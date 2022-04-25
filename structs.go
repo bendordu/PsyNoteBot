@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
@@ -32,11 +34,31 @@ type TestData struct {
 	NameRus,
 	NameEng,
 	About string
-	Questions []string
-	//Point      map[string]int
+	Questions  []string
 	PointText  []string
 	PointInt   []int
 	ResultText []string
 	ResultSum  []int
 	Inverse    []int
+}
+
+type TestBot struct {
+	ID   int
+	Name string
+}
+
+type Tresult struct {
+	ID     int
+	TestID int
+	Result int
+	Date   time.Time
+}
+
+type UserBot struct {
+	ID        int
+	ChatID    int64
+	Level     int
+	Score     int
+	Number    int
+	TresultID int
 }

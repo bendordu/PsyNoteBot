@@ -3,30 +3,26 @@ package main
 import (
 	"log"
 
+	"time"
+
 	"encoding/json"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 func main() {
-	bot, err := tgbotapi.NewBotAPI(BOTAPI)
-	if err != nil {
-		log.Panic(err)
-	}
 
-	bot.Debug = true
+	bot := tbot()
+	db := InitDB("db.sqlite3")
 
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
-
 	updates := bot.GetUpdatesChan(u)
 
-	level, score, number := 0, 0, 0 //Уровень выбора, Итоговый балл, Номер вопроса
-
-	psyParams := PsyParams{bot: bot}
 	var (
 		testData  TestData
 		typesTest TypesTest
+		psyParams = PsyParams{bot: bot}
 	)
 
 	data := readFile("json/typeTest.json")
@@ -43,40 +39,54 @@ func main() {
 
 		psyParams.chatid = update.Message.Chat.ID
 		text := update.Message.Text
+		userbot := UserBot{ChatID: update.Message.Chat.ID}
 
-		//Нулевой уровень 0 - старт
-		if text == "/start" || text == "Вернуться к началу" {
-			score, number, level = 0, 0, 0
+		InsertUser(userbot, db)
+
+		if text == "/start" || text == "Вернуться к началу" { //Нулевой уровень 0 - старт
+			userbot.Score, userbot.Number, userbot.Level = 0, 0, 0
+			UpdateData(userbot, db)
+
 			psyParams.keyboard = testKeyboard
 			psyParams.text = "Выберите тип"
 			change(psyParams)
-			level = 1
 
-		} else if level == 1 { //Переходим на следующий уровень 1 - выбор типа тестов
-			level = 2
+			userbot.Level = 1
+			UpdateLevel(userbot, db)
+
+		} else if Select("level", userbot, db) == 1 { //Переходим на следующий уровень 1 - выбор типа тестов
 			psyParams.text = text
 			typeTest(psyParams, typesTest)
 
-		} else if level == 2 { //Выбор шкалы - 2 уровень
-			level = 3
+			userbot.Level = 2
+			UpdateLevel(userbot, db)
+
+		} else if Select("level", userbot, db) == 2 { //Выбор шкалы - 2 уровень
+			userbot.Level = 3
+			UpdateLevel(userbot, db)
 			psyParams.text = text
 			testData = testDetails(psyParams, typesTest)
 
-		} else if level == 3 { //Подсчет баллов при каждом новом выборе
+		} else if Select("level", userbot, db) == 3 { //Подсчет баллов при каждом новом выборе
 
-			if number != 0 {
-				score += countScore(testData, text, number)
+			if Select("number", userbot, db) != 0 {
+				userbot.Score = countScore(testData, text, Select("number", userbot, db)) + Select("score", userbot, db)
+				UpdateScore(userbot, db)
 			}
 
-			if number < len(testData.Questions) {
-				numberQuestionTest(psyParams, testData, number)
-				number++
+			if Select("number", userbot, db) < len(testData.Questions) {
+				numberQuestionTest(psyParams, testData, Select("number", userbot, db))
+				userbot.Number = Select("number", userbot, db) + 1
+				UpdateNumber(userbot, db)
 
 			} else {
 				psyParams.keyboard = backKeyboard
-				psyParams.text = result(score, testData)
+				tresult := Tresult{Result: Select("score", userbot, db), Date: time.Now()}
+				InsertResult(tresult, db)
+				psyParams.text = result(Select("score", userbot, db), testData)
 				change(psyParams)
-				score, number, level = 0, 0, 0
+				userbot.Score, userbot.Number, userbot.Level = 0, 0, 0
+				UpdateData(userbot, db)
 			}
 
 		}

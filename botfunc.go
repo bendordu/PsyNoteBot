@@ -14,6 +14,17 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
+func tbot() (bot *tgbotapi.BotAPI) {
+
+	bot, err := tgbotapi.NewBotAPI(BOTAPI)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	bot.Debug = true
+	return bot
+}
+
 func readFile(path string) (data []byte) {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
