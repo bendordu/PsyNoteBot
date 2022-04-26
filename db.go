@@ -27,13 +27,18 @@ func InsertUser(userbot UserBot, db *sql.DB) {
 }
 
 func UpdateData(userbot UserBot, db *sql.DB) {
-	db.Exec(fmt.Sprintf(`UPDATE %s SET score=?, number=?, level=? WHERE chat_id=%d;`,
-		"user", userbot.ChatID), userbot.Score, userbot.Number, userbot.Level)
+	db.Exec(fmt.Sprintf(`UPDATE %s SET score=?, number=?, level=?, test_id=? WHERE chat_id=%d;`,
+		"user", userbot.ChatID), userbot.Score, userbot.Number, userbot.Level, userbot.TestID)
 }
 
 func InsertResult(tresult Tresult, db *sql.DB) {
-	db.Exec(fmt.Sprintf(`INSERT INTO %s (result, date, test_id) VALUES (?, ?, ?);`,
-		"t_result"), tresult.Result, tresult.Date, tresult.TestID)
+	db.Exec(fmt.Sprintf(`INSERT INTO %s (result, date, test_id, user_id) VALUES (?, ?, ?, ?);`,
+		"t_user"), tresult.Result, tresult.Date, tresult.TestID, tresult.UserID)
+}
+
+func InsertTestID(userbot UserBot, nameEng string, db *sql.DB) {
+	db.Exec(fmt.Sprintf(`UPDATE %s SET test_id=(SELECT test_id FROM %s WHERE name="%s") WHERE chat_id=%d;`,
+		"user", "test", nameEng, userbot.ChatID))
 }
 
 func UpdateLevel(userbot UserBot, db *sql.DB) (sql.Result, error) {
@@ -54,23 +59,6 @@ func UpdateScore(userbot UserBot, db *sql.DB) (sql.Result, error) {
 func Select(smth string, userbot UserBot, db *sql.DB) (unknown int) {
 	rows, err := db.Query(fmt.Sprintf(`SELECT %s FROM %s WHERE chat_id=%d;`,
 		smth, "user", userbot.ChatID))
-	if err != nil {
-		log.Fatal(err)
-	}
-	var un string
-	for rows.Next() {
-		if err := rows.Scan(&un); err != nil {
-			log.Fatal(err)
-		}
-	}
-	defer rows.Close()
-	unknown, _ = strconv.Atoi(un)
-	return unknown
-}
-
-func SelectTest(testbot TestBot, db *sql.DB) (unknown int) {
-	rows, err := db.Query(fmt.Sprintf(`SELECT %s FROM %s WHERE name=%s;`,
-		"test_id", "test", testbot.Name))
 	if err != nil {
 		log.Fatal(err)
 	}

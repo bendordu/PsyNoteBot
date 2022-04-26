@@ -42,23 +42,19 @@ type TestData struct {
 	Inverse    []int
 }
 
-type TestBot struct {
-	ID   int
-	Name string
-}
-
 type Tresult struct {
 	ID     int
 	TestID int
 	Result int
 	Date   time.Time
+	UserID int
 }
 
 type UserBot struct {
-	ID        int
-	ChatID    int64
-	Level     int
-	Score     int
-	Number    int
-	TresultID int
+	ID     int
+	ChatID int64
+	Level  int
+	Score  int
+	Number int
+	TestID int
 }
