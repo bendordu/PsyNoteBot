@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"strconv"
+	"time"
 
 	"log"
 
@@ -71,4 +72,36 @@ func Select(smth string, userbot UserBot, db *sql.DB) (unknown int) {
 	defer rows.Close()
 	unknown, _ = strconv.Atoi(un)
 	return unknown
+}
+
+func SelectOldResult(userbot UserBot, typesTest TypesTest, db *sql.DB) (str string) {
+	rows, err := db.Query(fmt.Sprintf(`SELECT name, date, result FROM t_user
+										JOIN test USING (test_id)
+										JOIN user USING (user_id) 
+									WHERE chat_id=%d
+									ORDER BY name, date;`, userbot.ChatID))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var (
+		name, result string
+		date         time.Time
+	)
+
+	for rows.Next() {
+		if err := rows.Scan(&name, &date, &result); err != nil {
+			log.Fatal(err)
+		}
+		for _, typeTest := range typesTest.TestTypes {
+			for _, test := range typeTest.Tests {
+				if test.TestName == name {
+					name = test.TestNameRus
+				}
+			}
+		}
+		str += fmt.Sprintf("Шкала %s (%s) - %s б.\n", name, date.Format("02-01-2006 15:04"), result)
+	}
+	defer rows.Close()
+	return str
 }

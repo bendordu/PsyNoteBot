@@ -41,7 +41,7 @@ func main() {
 		text := update.Message.Text
 		userbot := UserBot{ChatID: update.Message.Chat.ID}
 
-		InsertUser(userbot, db)
+		InsertUser(userbot, db) ///////если нет - не вызывать
 
 		if text == "/start" || text == "Вернуться к началу" { //Нулевой уровень 0 - старт
 
@@ -52,16 +52,19 @@ func main() {
 			psyParams.text = "Выберите тип"
 			change(psyParams)
 
-			userbot.Level = 1
-			UpdateLevel(userbot, db)
+			setLevel(1, userbot, db)
+
+		} else if text == "Прошлые результаты" {
+
+			psyParams.text = SelectOldResult(userbot, typesTest, db)
+			change(psyParams)
 
 		} else if Select("level", userbot, db) == 1 { //Переходим на следующий уровень 1 - выбор типа тестов
 
 			psyParams.text = text
 			typeTest(psyParams, typesTest)
 
-			userbot.Level = 2
-			UpdateLevel(userbot, db)
+			setLevel(2, userbot, db)
 
 		} else if Select("level", userbot, db) == 2 { //Выбор шкалы - 2 уровень
 
@@ -70,8 +73,7 @@ func main() {
 
 			InsertTestID(userbot, testData.NameEng, db)
 
-			userbot.Level = 3
-			UpdateLevel(userbot, db)
+			setLevel(3, userbot, db)
 
 		} else if Select("level", userbot, db) == 3 { //Подсчет баллов при каждом новом выборе
 

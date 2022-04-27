@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"strconv"
 
 	"log"
@@ -39,7 +40,12 @@ func change(p PsyParams) {
 	p.bot.Send(msg)
 }
 
-func typeTest(p PsyParams, typesTest TypesTest) {
+func setLevel(i int, userbot UserBot, db *sql.DB) {
+	userbot.Level = i
+	UpdateLevel(userbot, db)
+}
+
+func typeTest(p PsyParams, typesTest TypesTest) { /////////////////////////////
 
 	for _, typeTest := range typesTest.TestTypes {
 		if typeTest.NameRus == p.text {

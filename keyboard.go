@@ -30,6 +30,9 @@ var testKeyboard = tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButton("Коммуникация"),
 		tgbotapi.NewKeyboardButton("Эмоции, настроение"),
 	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Прошлые результаты"),
+	),
 )
 
 /*-----------------------------------------------------*/
@@ -155,16 +158,6 @@ var socialanxSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	),
 )
 
-/*var teylorSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
-	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Нет"),
-		tgbotapi.NewKeyboardButton("Да"),
-	),
-	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
-	),
-)*/
-
 var zungSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Никогда или изредка"),
@@ -179,25 +172,6 @@ var zungSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	),
 )
 
-/*var geriatricSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
-	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Нет"),
-		tgbotapi.NewKeyboardButton("Да"),
-	),
-	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
-	),
-)*/
-
-/*var motivationgoalSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
-	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Нет"),
-		tgbotapi.NewKeyboardButton("Да"),
-	),
-	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
-	),
-)*/
 var selfcontrolSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Верно"),
