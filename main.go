@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-
 	"time"
 
 	"encoding/json"
@@ -20,10 +19,10 @@ func main() {
 	updates := bot.GetUpdatesChan(u)
 
 	var (
-		testData  TestData
 		typesTest TypesTest
 		psyParams = PsyParams{bot: bot}
 	)
+	testD := make(map[int64]TestData)
 
 	data := readFile("json/typeTest.json")
 
@@ -69,7 +68,8 @@ func main() {
 		} else if Select("level", userbot, db) == 2 { //Выбор шкалы - 2 уровень
 
 			psyParams.text = text
-			testData = testDetails(psyParams, typesTest)
+			testData := testDetails(psyParams, typesTest)
+			testD[update.Message.Chat.ID] = testData
 
 			InsertTestID(userbot, testData.NameEng, db)
 
@@ -79,13 +79,13 @@ func main() {
 
 			if Select("number", userbot, db) != 0 {
 
-				userbot.Score = countScore(testData, text, Select("number", userbot, db)) + Select("score", userbot, db)
+				userbot.Score = countScore(testD, update.Message.Chat.ID, text, Select("number", userbot, db)) + Select("score", userbot, db)
 				UpdateScore(userbot, db)
 			}
 
-			if Select("number", userbot, db) < len(testData.Questions) {
+			if Select("number", userbot, db) < len(testD[update.Message.Chat.ID].Questions) {
 
-				numberQuestionTest(psyParams, testData, Select("number", userbot, db))
+				numberQuestionTest(psyParams, testD, update.Message.Chat.ID, Select("number", userbot, db))
 
 				userbot.Number = Select("number", userbot, db) + 1
 				UpdateNumber(userbot, db)
@@ -101,11 +101,12 @@ func main() {
 					TestID: Select("test_id", userbot, db)}
 				InsertResult(tresult, db)
 
-				psyParams.text = result(Select("score", userbot, db), testData)
+				psyParams.text = result(Select("score", userbot, db), testD, update.Message.Chat.ID)
 				change(psyParams)
 
 				userbot.Score, userbot.Number, userbot.Level, userbot.TestID = 0, 0, 0, 0
 				UpdateData(userbot, db)
+				delete(testD, update.Message.Chat.ID)
 			}
 		}
 	}

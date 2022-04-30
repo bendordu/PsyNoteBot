@@ -79,45 +79,45 @@ func testDetails(p PsyParams, typesTest TypesTest) (testData TestData) {
 	return testData
 }
 
-func numberQuestionTest(p PsyParams, testData TestData, i int) {
-	p.text = fmt.Sprintf("%s. %s", strconv.Itoa(i+1), testData.Questions[i])
-	p.keyboard = typeTestKeyboard[testData.NameEng]
+func numberQuestionTest(p PsyParams, testD map[int64]TestData, chatID int64, i int) {
+	p.text = fmt.Sprintf("%s. %s", strconv.Itoa(i+1), testD[chatID].Questions[i])
+	p.keyboard = typeTestKeyboard[testD[chatID].NameEng]
 	change(p)
 }
 
-func countScore(testData TestData, text string, number int) (score int) {
+func countScore(testD map[int64]TestData, chatID int64, text string, number int) (score int) {
 
 	inv := false
-	if len(testData.Inverse) != 0 {
-		for _, n := range testData.Inverse {
+	if len(testD[chatID].Inverse) != 0 {
+		for _, n := range testD[chatID].Inverse {
 			if number == n {
 				inv = true
 			}
 		}
 	}
 
-	for ind, value := range testData.PointText {
+	for ind, value := range testD[chatID].PointText {
 		if text == value {
 			if inv == false {
-				score = testData.PointInt[ind]
+				score = testD[chatID].PointInt[ind]
 			} else {
-				score = testData.PointInt[len(testData.PointInt)-1-ind]
+				score = testD[chatID].PointInt[len(testD[chatID].PointInt)-1-ind]
 			}
 		}
 	}
 	return score
 }
 
-func result(score int, testData TestData) (resultText string) {
+func result(score int, testD map[int64]TestData, chatID int64) (resultText string) {
 
 	var resT string
 
-	for ind, value := range testData.ResultSum {
+	for ind, value := range testD[chatID].ResultSum {
 		if score <= value && ind == 0 {
-			resT = testData.ResultText[ind]
+			resT = testD[chatID].ResultText[ind]
 
-		} else if score <= testData.ResultSum[ind] && score > testData.ResultSum[ind-1] {
-			resT = testData.ResultText[ind]
+		} else if score <= testD[chatID].ResultSum[ind] && score > testD[chatID].ResultSum[ind-1] {
+			resT = testD[chatID].ResultText[ind]
 		}
 	}
 	resultText = fmt.Sprintf("Суммарное количество баллов: %s. %s", strconv.Itoa(score), resT)
