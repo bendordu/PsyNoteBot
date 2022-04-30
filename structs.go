@@ -43,18 +43,8 @@ type TestData struct {
 }
 
 type Tresult struct {
-	ID     int
 	TestID int
 	Result int
 	Date   time.Time
-	UserID int
-}
-
-type UserBot struct {
-	ID     int
 	ChatID int64
-	Level  int
-	Score  int
-	Number int
-	TestID int
 }

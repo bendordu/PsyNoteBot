@@ -3,11 +3,12 @@ package main
 import (
 	"database/sql"
 	"strconv"
-	"time"
+
+	"fmt"
 
 	"log"
 
-	"fmt"
+	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -23,63 +24,36 @@ func InitDB(filepath string) *sql.DB {
 	return db
 }
 
-func InsertUser(userbot UserBot, db *sql.DB) {
-	db.Exec(fmt.Sprintf(`INSERT INTO %s (chat_id) VALUES (?);`, "user"), userbot.ChatID)
-}
-
-func UpdateData(userbot UserBot, db *sql.DB) {
-	db.Exec(fmt.Sprintf(`UPDATE %s SET score=?, number=?, level=?, test_id=? WHERE chat_id=%d;`,
-		"user", userbot.ChatID), userbot.Score, userbot.Number, userbot.Level, userbot.TestID)
+func InsertUser(chatID int64, db *sql.DB) {
+	db.Exec(fmt.Sprintf(`INSERT INTO %s (chat_id) VALUES (?);`, "user"), chatID)
 }
 
 func InsertResult(tresult Tresult, db *sql.DB) {
-	db.Exec(fmt.Sprintf(`INSERT INTO %s (result, date, test_id, user_id) VALUES (?, ?, ?, ?);`,
-		"t_user"), tresult.Result, tresult.Date, tresult.TestID, tresult.UserID)
+	db.Exec(fmt.Sprintf(`INSERT INTO %s (result, date, test_id, chat_id) VALUES (?, ?, ?, ?);`,
+		"test_result"), tresult.Result, tresult.Date, tresult.TestID, tresult.ChatID)
 }
 
-func InsertTestID(userbot UserBot, nameEng string, db *sql.DB) {
-	db.Exec(fmt.Sprintf(`UPDATE %s SET test_id=(SELECT test_id FROM %s WHERE name="%s") WHERE chat_id=%d;`,
-		"user", "test", nameEng, userbot.ChatID))
-}
-
-func UpdateLevel(userbot UserBot, db *sql.DB) (sql.Result, error) {
-	return db.Exec(fmt.Sprintf(`UPDATE %s SET level=? WHERE chat_id=%d;`,
-		"user", userbot.ChatID), userbot.Level)
-}
-
-func UpdateNumber(userbot UserBot, db *sql.DB) (sql.Result, error) {
-	return db.Exec(fmt.Sprintf(`UPDATE %s SET number=? WHERE chat_id=%d;`,
-		"user", userbot.ChatID), userbot.Number)
-}
-
-func UpdateScore(userbot UserBot, db *sql.DB) (sql.Result, error) {
-	return db.Exec(fmt.Sprintf(`UPDATE %s SET score=? WHERE chat_id=%d;`,
-		"user", userbot.ChatID), userbot.Score)
-}
-
-func Select(smth string, userbot UserBot, db *sql.DB) (unknown int) {
-	rows, err := db.Query(fmt.Sprintf(`SELECT %s FROM %s WHERE chat_id=%d;`,
-		smth, "user", userbot.ChatID))
+func SelectTestID(nameEng string, db *sql.DB) (testID int) {
+	rows, err := db.Query(fmt.Sprintf(`SELECT test_id FROM %s WHERE name="%s";`, "test", nameEng))
 	if err != nil {
 		log.Fatal(err)
 	}
-	var un string
+	var tID string
 	for rows.Next() {
-		if err := rows.Scan(&un); err != nil {
+		if err := rows.Scan(&tID); err != nil {
 			log.Fatal(err)
 		}
 	}
 	defer rows.Close()
-	unknown, _ = strconv.Atoi(un)
-	return unknown
+	testID, _ = strconv.Atoi(tID)
+	return testID
 }
 
-func SelectOldResult(userbot UserBot, typesTest TypesTest, db *sql.DB) (str string) {
-	rows, err := db.Query(fmt.Sprintf(`SELECT name, date, result FROM t_user
+func SelectOldResult(chatID int64, typesTest TypesTest, db *sql.DB) (str string) {
+	rows, err := db.Query(fmt.Sprintf(`SELECT name, date, result FROM %s
 										JOIN test USING (test_id)
-										JOIN user USING (user_id) 
 									WHERE chat_id=%d
-									ORDER BY name, date;`, userbot.ChatID))
+									ORDER BY name, date;`, "test_result", chatID))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -105,3 +79,18 @@ func SelectOldResult(userbot UserBot, typesTest TypesTest, db *sql.DB) (str stri
 	defer rows.Close()
 	return str
 }
+
+/*
+CREATE TABLE test_result(
+    t_result_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    date DATE,
+	result INT,
+    test_id INT,
+    chat_id INT64,
+    FOREIGN KEY (chat_id) REFERENCES user (chat_id)
+)
+CREATE TABLE user(
+    user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    chat_id INT64 NOT NULL UNIQUE
+)
+*/

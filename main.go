@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+
 	"time"
 
 	"encoding/json"
@@ -23,9 +24,9 @@ func main() {
 		psyParams = PsyParams{bot: bot}
 	)
 	testD := make(map[int64]TestData)
+	userD := make(map[int64]map[string]int)
 
 	data := readFile("json/typeTest.json")
-
 	if err := json.Unmarshal(data, &typesTest); err != nil {
 		log.Fatal(err)
 	}
@@ -36,77 +37,77 @@ func main() {
 			continue
 		}
 
-		psyParams.chatid = update.Message.Chat.ID
+		chatID := update.Message.Chat.ID
+		psyParams.chatid = chatID
 		text := update.Message.Text
-		userbot := UserBot{ChatID: update.Message.Chat.ID}
 
-		InsertUser(userbot, db) ///////если нет - не вызывать
+		_, found := userD[chatID]
+		if found == false {
+			userData := make(map[string]int)
+			userD[chatID] = userData
+		}
+
+		InsertUser(chatID, db)
 
 		if text == "/start" || text == "Вернуться к началу" { //Нулевой уровень 0 - старт
 
-			userbot.Score, userbot.Number, userbot.Level, userbot.TestID = 0, 0, 0, 0
-			UpdateData(userbot, db)
+			userD[chatID]["score"],
+				userD[chatID]["number"],
+				userD[chatID]["level"],
+				userD[chatID]["testID"] = 0, 0, 0, 0
 
 			psyParams.keyboard = testKeyboard
 			psyParams.text = "Выберите тип"
 			change(psyParams)
 
-			setLevel(1, userbot, db)
+			userD[chatID]["level"] = 1
 
 		} else if text == "Прошлые результаты" {
 
-			psyParams.text = SelectOldResult(userbot, typesTest, db)
+			psyParams.text = SelectOldResult(chatID, typesTest, db)
 			change(psyParams)
 
-		} else if Select("level", userbot, db) == 1 { //Переходим на следующий уровень 1 - выбор типа тестов
+		} else if userD[chatID]["level"] == 1 { //Переходим на следующий уровень 1 - выбор типа тестов
 
 			psyParams.text = text
 			typeTest(psyParams, typesTest)
+			userD[chatID]["level"] = 2
 
-			setLevel(2, userbot, db)
-
-		} else if Select("level", userbot, db) == 2 { //Выбор шкалы - 2 уровень
+		} else if userD[chatID]["level"] == 2 { //Выбор шкалы - 2 уровень
 
 			psyParams.text = text
 			testData := testDetails(psyParams, typesTest)
-			testD[update.Message.Chat.ID] = testData
+			testD[chatID] = testData
 
-			InsertTestID(userbot, testData.NameEng, db)
+			userD[chatID]["testID"] = SelectTestID(testD[chatID].NameEng, db)
+			userD[chatID]["level"] = 3
 
-			setLevel(3, userbot, db)
+		} else if userD[chatID]["level"] == 3 { //Подсчет баллов при каждом новом выборе
 
-		} else if Select("level", userbot, db) == 3 { //Подсчет баллов при каждом новом выборе
-
-			if Select("number", userbot, db) != 0 {
-
-				userbot.Score = countScore(testD, update.Message.Chat.ID, text, Select("number", userbot, db)) + Select("score", userbot, db)
-				UpdateScore(userbot, db)
+			if userD[chatID]["number"] != 0 {
+				userD[chatID]["score"] += countScore(testD, chatID, text, userD[chatID]["number"])
 			}
 
-			if Select("number", userbot, db) < len(testD[update.Message.Chat.ID].Questions) {
-
-				numberQuestionTest(psyParams, testD, update.Message.Chat.ID, Select("number", userbot, db))
-
-				userbot.Number = Select("number", userbot, db) + 1
-				UpdateNumber(userbot, db)
+			if userD[chatID]["number"] < len(testD[chatID].Questions) {
+				numberQuestionTest(psyParams, testD, chatID, userD[chatID]["number"])
+				userD[chatID]["number"] += 1
 
 			} else {
 
 				psyParams.keyboard = backKeyboard
 
 				tresult := Tresult{
-					Result: Select("score", userbot, db),
+					Result: userD[chatID]["score"],
 					Date:   time.Now(),
-					UserID: Select("user_id", userbot, db),
-					TestID: Select("test_id", userbot, db)}
+					ChatID: chatID,
+					TestID: userD[chatID]["testID"]}
 				InsertResult(tresult, db)
 
-				psyParams.text = result(Select("score", userbot, db), testD, update.Message.Chat.ID)
+				psyParams.text = result(userD[chatID]["score"], testD, chatID)
 				change(psyParams)
 
-				userbot.Score, userbot.Number, userbot.Level, userbot.TestID = 0, 0, 0, 0
-				UpdateData(userbot, db)
-				delete(testD, update.Message.Chat.ID)
+				delete(testD, chatID)
+				delete(userD, chatID)
 			}
 		}
 	}
