@@ -10,6 +10,8 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
+//  Тест не является средством для постановки диагноза.
+
 func main() {
 
 	bot := tbot()
@@ -25,6 +27,7 @@ func main() {
 	)
 	testD := make(map[int64]TestData)
 	userD := make(map[int64]map[string]int)
+	answers := make(map[int64]map[int]int)
 
 	data := readFile("json/typeTest.json")
 	if err := json.Unmarshal(data, &typesTest); err != nil {
@@ -86,6 +89,12 @@ func main() {
 
 			if userD[chatID]["number"] != 0 {
 				userD[chatID]["score"] += countScore(testD, chatID, text, userD[chatID]["number"])
+
+			} else {
+				if len(testD[chatID].Scales) != 0 {
+					ans := make(map[int]int)
+					answers[chatID] = ans
+				}
 			}
 
 			if userD[chatID]["number"] < len(testD[chatID].Questions) {
@@ -103,7 +112,7 @@ func main() {
 					TestID: userD[chatID]["testID"]}
 				InsertResult(tresult, db)
 
-				psyParams.text = result(userD[chatID]["score"], testD, chatID)
+				psyParams.text = result(answers, userD[chatID]["score"], testD, chatID)
 				change(psyParams)
 
 				delete(testD, chatID)

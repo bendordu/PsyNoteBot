@@ -40,6 +40,7 @@ type TestData struct {
 	ResultText []string
 	ResultSum  []int
 	Inverse    []int
+	Scales     map[string][]int
 }
 
 type Tresult struct {

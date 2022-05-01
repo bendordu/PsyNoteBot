@@ -94,6 +94,16 @@
 				"testName": "alexitimia",
 				"testNameRus": "Алекситимии"
 			}]
+		},
+		{
+			"nameEng": "addiction",
+			"nameRus": "Зависимость",
+			"text": "зависимости",
+			"tests": [{
+				"path": "json/addiction/kimberlyYang.json",
+				"testName": "kimberlyYang",
+				"testNameRus": "Кимберли-Янг"
+			}]
 		}
 	]
 }

@@ -74,7 +74,7 @@ func SelectOldResult(chatID int64, typesTest TypesTest, db *sql.DB) (str string)
 				}
 			}
 		}
-		str += fmt.Sprintf("Шкала %s (%s) - %s б.\n", name, date.Format("02-01-2006 15:04"), result)
+		str += fmt.Sprintf("Шкала %s (%s) - %s\n", name, date.Format("02-01-2006 15:04"), result)
 	}
 	defer rows.Close()
 	return str

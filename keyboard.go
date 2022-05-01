@@ -23,7 +23,7 @@ var testKeyboard = tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButton("Депрессия"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Интеллект"),
+		tgbotapi.NewKeyboardButton("Зависимость"),
 		tgbotapi.NewKeyboardButton("Мотивация"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
@@ -94,6 +94,15 @@ var affectiveKeyboard = tgbotapi.NewReplyKeyboard(
 	),
 )
 
+var addictionKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Кимберли-Янг"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+	),
+)
+
 /*------------------------------------------------------------------*/
 
 var hamiltonSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
@@ -117,9 +126,6 @@ var beckAnxSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	),
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Слегка. Не слишком меня беспокоил"),
-	),
-	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Умеренно. Это было неприятно, но я мог это переносить"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Умеренно. Это было неприятно, но я мог это переносить"),
@@ -217,6 +223,21 @@ var yesNoSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButton("Да"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+	),
+)
+
+var kimberlyYangSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Никогда"),
+		tgbotapi.NewKeyboardButton("Редко"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Регулярно"),
+		tgbotapi.NewKeyboardButton("Часто"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Постоянно"),
 		tgbotapi.NewKeyboardButton("Вернуться к началу"),
 	),
 )

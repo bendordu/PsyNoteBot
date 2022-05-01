@@ -8,6 +8,7 @@ var typeTestKeyboard = map[string]tgbotapi.ReplyKeyboardMarkup{
 	"motivation":         motivationKeyboard,
 	"communication":      communicationKeyboard,
 	"affective":          affectiveKeyboard,
+	"addiction":          addictionKeyboard,
 	"hamilton":           hamiltonSymptomsKeyboard,
 	"beckanx":            beckAnxSymptomsKeyboard,
 	"shihan":             shihanSymptomsKeyboard,
@@ -21,4 +22,5 @@ var typeTestKeyboard = map[string]tgbotapi.ReplyKeyboardMarkup{
 	"selfcontrol":        selfcontrolSymptomsKeyboard,
 	"alexitimia":         alexitimiaSymptomsKeyboard,
 	"autism":             autismSymptomsKeyboard,
+	"kimberlyYang":       kimberlyYangSymptomsKeyboard,
 }

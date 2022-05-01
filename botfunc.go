@@ -36,6 +36,7 @@ func readFile(path string) (data []byte) {
 func change(p PsyParams) {
 	msg := tgbotapi.NewMessage(p.chatid, p.text)
 	msg.ReplyMarkup = p.keyboard
+	msg.ParseMode = "HTML"
 	p.bot.Send(msg)
 }
 
@@ -101,7 +102,7 @@ func countScore(testD map[int64]TestData, chatID int64, text string, number int)
 	return score
 }
 
-func result(score int, testD map[int64]TestData, chatID int64) (resultText string) {
+func result(answers map[int64]map[int]int, score int, testD map[int64]TestData, chatID int64) (resultText string) {
 
 	var resT string
 
@@ -113,6 +114,18 @@ func result(score int, testD map[int64]TestData, chatID int64) (resultText strin
 			resT = testD[chatID].ResultText[ind]
 		}
 	}
+
+	if len(answers) != 0 {
+		var totalSc int
+		maxSc := make(map[string]int)
+		for key, value := range testD[chatID].Scales {
+			for _, numb := range value {
+				totalSc += answers[chatID][numb]
+			}
+			maxSc[key] = totalSc
+		}
+	}
+
 	resultText = fmt.Sprintf("Суммарное количество баллов: %s. %s", strconv.Itoa(score), resT)
 	return resultText
 }
