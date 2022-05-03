@@ -4,16 +4,18 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
+var toStart = tgbotapi.NewKeyboardButton("Выход 🚪")
+
 var startKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Пройти тест"),
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+		toStart,
 	),
 )
 
 var backKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+		toStart,
 	),
 )
 
@@ -31,7 +33,7 @@ var testKeyboard = tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButton("Эмоции, настроение"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Прошлые результаты"),
+		tgbotapi.NewKeyboardButton("Прошлые результаты 🕔"),
 	),
 )
 
@@ -50,7 +52,7 @@ var anxietyKeyboard = tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButton("Тейлора"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+		toStart,
 	),
 )
 
@@ -60,7 +62,7 @@ var depressionKeyboard = tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButton("Гериатрическая"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+		toStart,
 	),
 )
 
@@ -70,7 +72,7 @@ var motivationKeyboard = tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButton("Мотивации одобрения"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+		toStart,
 	),
 )
 
@@ -81,7 +83,7 @@ var communicationKeyboard = tgbotapi.NewReplyKeyboard(
 	),
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Аутизм"),
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+		toStart,
 	),
 )
 
@@ -90,7 +92,7 @@ var affectiveKeyboard = tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButton("Алекситимии"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+		toStart,
 	),
 )
 
@@ -99,7 +101,7 @@ var addictionKeyboard = tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButton("Кимберли-Янг"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+		toStart,
 	),
 )
 
@@ -116,7 +118,7 @@ var hamiltonSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	),
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("В очень тяжёлой степени"),
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+		toStart,
 	),
 )
 
@@ -131,7 +133,7 @@ var beckAnxSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButton("Умеренно. Это было неприятно, но я мог это переносить"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+		toStart,
 	),
 )
 
@@ -146,7 +148,7 @@ var shihanSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	),
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Крайне сильно"),
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+		toStart,
 	),
 )
 
@@ -160,7 +162,7 @@ var socialanxSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButton("Да"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+		toStart,
 	),
 )
 
@@ -174,7 +176,7 @@ var zungSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButton("Почти всегда или постоянно"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+		toStart,
 	),
 )
 
@@ -184,7 +186,7 @@ var selfcontrolSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButton("Неверно"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+		toStart,
 	),
 )
 
@@ -199,7 +201,7 @@ var alexitimiaSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	),
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Совершенно согласен"),
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+		toStart,
 	),
 )
 
@@ -213,7 +215,7 @@ var autismSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButton("Полностью не согласен"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+		toStart,
 	),
 )
 
@@ -223,7 +225,7 @@ var yesNoSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButton("Да"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+		toStart,
 	),
 )
 
@@ -238,6 +240,6 @@ var kimberlyYangSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	),
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Постоянно"),
-		tgbotapi.NewKeyboardButton("Вернуться к началу"),
+		toStart,
 	),
 )

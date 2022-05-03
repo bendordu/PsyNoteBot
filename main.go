@@ -10,8 +10,6 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-//  Тест не является средством для постановки диагноза.
-
 func main() {
 
 	bot := tbot()
@@ -52,7 +50,7 @@ func main() {
 
 		InsertUser(chatID, db)
 
-		if text == "/start" || text == "Вернуться к началу" { //Нулевой уровень 0 - старт
+		if text == "/start" || text == "Выход 🚪" { //Нулевой уровень 0 - старт
 
 			userD[chatID]["score"],
 				userD[chatID]["number"],
@@ -65,41 +63,68 @@ func main() {
 
 			userD[chatID]["level"] = 1
 
-		} else if text == "Прошлые результаты" {
+		} else if text == "Прошлые результаты 🕔" || text == "/show_results" {
 
 			psyParams.text = SelectOldResult(chatID, typesTest, db)
+			if len(psyParams.text) == 0 {
+				psyParams.text = "🦥Пока результатов нет.\nПройдите любой из тестов до конца, и тогда они отобразятся здесь."
+			}
 			change(psyParams)
 
 		} else if userD[chatID]["level"] == 1 { //Переходим на следующий уровень 1 - выбор типа тестов
 
 			psyParams.text = text
-			typeTest(psyParams, typesTest)
-			userD[chatID]["level"] = 2
+			err := typeTest(psyParams, typesTest)
+			if err != nil {
+				log.Println(err)
+			} else {
+				userD[chatID]["level"] = 2
+			}
 
 		} else if userD[chatID]["level"] == 2 { //Выбор шкалы - 2 уровень
 
 			psyParams.text = text
-			testData := testDetails(psyParams, typesTest)
-			testD[chatID] = testData
-
-			userD[chatID]["testID"] = SelectTestID(testD[chatID].NameEng, db)
-			userD[chatID]["level"] = 3
+			testData, err := testDetails(psyParams, typesTest)
+			if err != nil {
+				log.Println(err)
+			} else {
+				testD[chatID] = testData
+				userD[chatID]["testID"] = SelectTestID(testD[chatID].NameEng, db)
+				userD[chatID]["level"] = 3
+			}
 
 		} else if userD[chatID]["level"] == 3 { //Подсчет баллов при каждом новом выборе
 
-			if userD[chatID]["number"] != 0 {
-				userD[chatID]["score"] += countScore(testD, chatID, text, userD[chatID]["number"])
-
-			} else {
+			/*else {
 				if len(testD[chatID].Scales) != 0 {
 					ans := make(map[int]int)
 					answers[chatID] = ans
 				}
+			}*/
+
+			var (
+				score int
+				err   error
+			)
+			if userD[chatID]["number"] != 0 {
+				score, err = countScore(testD, chatID, text, userD[chatID]["number"])
+				userD[chatID]["score"] += score
+				if err != nil {
+					log.Println(err)
+					psyParams.text = "❗Выберите вариант ответа, нажав кнопку на клавиатуре."
+					psyParams.keyboard = typeTestKeyboard[testD[chatID].NameEng]
+					change(psyParams)
+				}
+			} else if text != "Пройти тест" {
+				psyParams.text = "❗Не вводите ничего с клавиатуры. Выбирайте из предложенных вариантов ответов. Тест начался."
+				change(psyParams)
 			}
 
 			if userD[chatID]["number"] < len(testD[chatID].Questions) {
-				numberQuestionTest(psyParams, testD, chatID, userD[chatID]["number"])
-				userD[chatID]["number"] += 1
+				if err == nil {
+					numberQuestionTest(psyParams, testD, chatID, userD[chatID]["number"])
+					userD[chatID]["number"] += 1
+				}
 
 			} else {
 

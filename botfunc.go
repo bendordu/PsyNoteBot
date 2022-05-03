@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"strconv"
 
 	"log"
@@ -40,37 +41,54 @@ func change(p PsyParams) {
 	p.bot.Send(msg)
 }
 
-func typeTest(p PsyParams, typesTest TypesTest) {
+func typeTest(p PsyParams, typesTest TypesTest) (err error) {
 
+	text := p.text
 	for _, typeTest := range typesTest.TestTypes {
-		if typeTest.NameRus == p.text {
+		if typeTest.NameRus == text {
+
 			p.text = fmt.Sprintf("Выберите шкалу %s", typeTest.Text)
 			p.keyboard = typeTestKeyboard[typeTest.NameEng]
+			err = nil
+			break
+
+		} else {
+			p.text = "❗Выберите тип теста, нажав кнопку на клавиатуре."
+			err = errors.New("Не выбран тип теста")
 		}
 	}
 	change(p)
+	return err
 }
 
-func testDetails(p PsyParams, typesTest TypesTest) (testData TestData) {
+func testDetails(p PsyParams, typesTest TypesTest) (testData TestData, err error) {
 
-	var path string
+	text := p.text
+out:
 	for _, typeTest := range typesTest.TestTypes {
 		for _, test := range typeTest.Tests {
-			if test.TestNameRus == p.text {
-				path = test.Path
+			if test.TestNameRus == text {
+
+				path := test.Path
+				data := readFile(path)
+
+				if err := json.Unmarshal(data, &testData); err != nil {
+					log.Fatal(err)
+				}
+
+				p.text = testData.About
+				p.keyboard = startKeyboard
+				err = nil
+				break out
+
+			} else {
+				p.text = "❗Выберите шкалу, нажав кнопку на клавиатуре."
+				err = errors.New("Не выбрана шкала")
 			}
 		}
 	}
-
-	data := readFile(path)
-	if err := json.Unmarshal(data, &testData); err != nil {
-		log.Fatal(err)
-	}
-
-	p.text = testData.About
-	p.keyboard = startKeyboard
 	change(p)
-	return testData
+	return testData, err
 }
 
 func numberQuestionTest(p PsyParams, testD map[int64]TestData, chatID int64, i int) {
@@ -79,7 +97,7 @@ func numberQuestionTest(p PsyParams, testD map[int64]TestData, chatID int64, i i
 	change(p)
 }
 
-func countScore(testD map[int64]TestData, chatID int64, text string, number int) (score int) {
+func countScore(testD map[int64]TestData, chatID int64, text string, number int) (score int, err error) {
 
 	inv := false
 	if len(testD[chatID].Inverse) != 0 {
@@ -97,9 +115,14 @@ func countScore(testD map[int64]TestData, chatID int64, text string, number int)
 			} else {
 				score = testD[chatID].PointInt[len(testD[chatID].PointInt)-1-ind]
 			}
+			err = nil
+			break
+
+		} else {
+			err = errors.New("Не выбран вариант ответа")
 		}
 	}
-	return score
+	return score, err
 }
 
 func result(answers map[int64]map[int]int, score int, testD map[int64]TestData, chatID int64) (resultText string) {
@@ -126,6 +149,6 @@ func result(answers map[int64]map[int]int, score int, testD map[int64]TestData, 
 		}
 	}
 
-	resultText = fmt.Sprintf("Суммарное количество баллов: %s. %s", strconv.Itoa(score), resT)
+	resultText = fmt.Sprintf("Суммарное количество баллов: %s. %s\n\n❕Помните, что онлайн-тесты не предназначены для самостоятельной постановки диагноза. В случае любых сомнений обращайтесь к специалистам.", strconv.Itoa(score), resT)
 	return resultText
 }
