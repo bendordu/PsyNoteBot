@@ -23,4 +23,10 @@ var typeTestKeyboard = map[string]tgbotapi.ReplyKeyboardMarkup{
 	"alexitimia":         alexitimiaSymptomsKeyboard,
 	"autism":             autismSymptomsKeyboard,
 	"kimberlyYang":       kimberlyYangSymptomsKeyboard,
+	"ptsr":               ptsrSymptomsKeyboard,
+	"computeradd":        computeraddSymptomsKeyboard,
+	"holland":            hollandSymptomsKeyboard,
+	"eat26":              eat26SymptomsKeyboard,
+	"dissociative":       dissociativeSymptomsKeyboard,
+	"adhd":               adhdSymptomsKeyboard,
 }

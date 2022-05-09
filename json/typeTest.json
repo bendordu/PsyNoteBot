@@ -32,6 +32,21 @@
 				"path": "json/anxiety/teylor.json",
 				"testName": "teylor",
                 "testNameRus": "Тейлора"
+			},
+			{
+				"path": "json/anxiety/ptsr.json",
+				"testName": "ptsr",
+                "testNameRus": "ПТСР"
+			},
+			{
+				"path": "json/anxiety/dissociative.json",
+				"testName": "dissociative",
+                "testNameRus": "Диссоциации"
+			},
+			{
+				"path": "json/anxiety/adhd.json",
+				"testName": "adhd",
+                "testNameRus": "СДВГ"
 			}
         ]
 		},
@@ -103,6 +118,21 @@
 				"path": "json/addiction/kimberlyYang.json",
 				"testName": "kimberlyYang",
 				"testNameRus": "Кимберли-Янг"
+			},
+			{
+				"path": "json/addiction/computeradd.json",
+				"testName": "computeradd",
+				"testNameRus": "Компьютерной зависимости"
+			},
+			{
+				"path": "json/addiction/holland.json",
+				"testName": "holland",
+				"testNameRus": "Пищевого поведения"
+			},
+			{
+				"path": "json/addiction/eat26.json",
+				"testName": "eat26",
+				"testNameRus": "EAT-26"
 			}]
 		}
 	]

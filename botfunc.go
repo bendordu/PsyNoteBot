@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"errors"
 	"strconv"
 
@@ -39,6 +40,32 @@ func change(p PsyParams) {
 	msg.ReplyMarkup = p.keyboard
 	msg.ParseMode = "HTML"
 	p.bot.Send(msg)
+}
+
+func clearAll(chatID int64, testD map[int64]TestData, userD map[int64]map[string]int) {
+	delete(testD, chatID)
+	delete(userD, chatID)
+}
+
+func setZero(chatID int64, userD map[int64]map[string]int) {
+	userD[chatID]["score"],
+		userD[chatID]["number"],
+		userD[chatID]["level"],
+		userD[chatID]["testID"] = 0, 0, 0, 0
+}
+
+func allTests(chatID int64, typesTest TypesTest, db *sql.DB, bot *tgbotapi.BotAPI) {
+	testsList := SelectTests(typesTest, db)
+	var testsNameRus [][]tgbotapi.InlineKeyboardButton
+
+	msg := tgbotapi.NewMessage(chatID, "Список всех тестов")
+
+	for _, test := range testsList {
+		testsNameRus = append(testsNameRus, tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(test, test)))
+	}
+
+	msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(testsNameRus...)
+	bot.Send(msg)
 }
 
 func typeTest(p PsyParams, typesTest TypesTest) (err error) {
@@ -92,6 +119,7 @@ out:
 }
 
 func numberQuestionTest(p PsyParams, testD map[int64]TestData, chatID int64, i int) {
+
 	p.text = fmt.Sprintf("%s. %s", strconv.Itoa(i+1), testD[chatID].Questions[i])
 	p.keyboard = typeTestKeyboard[testD[chatID].NameEng]
 	change(p)
@@ -149,6 +177,6 @@ func result(answers map[int64]map[int]int, score int, testD map[int64]TestData, 
 		}
 	}
 
-	resultText = fmt.Sprintf("Суммарное количество баллов: %s. %s\n\n❕Помните, что онлайн-тесты не предназначены для самостоятельной постановки диагноза. В случае любых сомнений обращайтесь к специалистам.", strconv.Itoa(score), resT)
+	resultText = fmt.Sprintf("Суммарное количество баллов: %s. %s\n\n❕Помните, что онлайн-тесты не предназначены для самостоятельной постановки диагноза. В случае любых сомнений обратитесь к специалисту. Например, вы можете написать создателю этого бота — психиатру @stayclosetonight", strconv.Itoa(score), resT)
 	return resultText
 }

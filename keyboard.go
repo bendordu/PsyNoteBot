@@ -50,8 +50,11 @@ var anxietyKeyboard = tgbotapi.NewReplyKeyboard(
 	),
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Тейлора"),
+		tgbotapi.NewKeyboardButton("ПТСР"),
+		tgbotapi.NewKeyboardButton("СДВГ"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Диссоциации"),
 		toStart,
 	),
 )
@@ -99,6 +102,10 @@ var affectiveKeyboard = tgbotapi.NewReplyKeyboard(
 var addictionKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Кимберли-Янг"),
+		tgbotapi.NewKeyboardButton("EAT-26"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Компьютерной зависимости"),
 	),
 	tgbotapi.NewKeyboardButtonRow(
 		toStart,
@@ -240,6 +247,107 @@ var kimberlyYangSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
 	),
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Постоянно"),
+		toStart,
+	),
+)
+
+var ptsrSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Совершенно неверно"),
+		tgbotapi.NewKeyboardButton("Иногда неверно"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("До некоторой степени верно"),
+		tgbotapi.NewKeyboardButton("Верно"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Совершенно верно"),
+		toStart,
+	),
+)
+
+var computeraddSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Никогда"),
+		tgbotapi.NewKeyboardButton("Редко"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Часто"),
+		tgbotapi.NewKeyboardButton("Очень часто"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		toStart,
+	),
+)
+
+var hollandSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Никогда"),
+		tgbotapi.NewKeyboardButton("Редко"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Иногда"),
+		tgbotapi.NewKeyboardButton("Часто"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Очень часто"),
+		toStart,
+	),
+)
+
+var eat26SymptomsKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Никогда"),
+		tgbotapi.NewKeyboardButton("Редко"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Иногда"),
+		tgbotapi.NewKeyboardButton("Часто"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Как правило"),
+		tgbotapi.NewKeyboardButton("Постоянно"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		toStart,
+	),
+)
+
+var dissociativeSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("0%"),
+		tgbotapi.NewKeyboardButton("10%"),
+		tgbotapi.NewKeyboardButton("20%"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("30%"),
+		tgbotapi.NewKeyboardButton("40%"),
+		tgbotapi.NewKeyboardButton("50%"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("60%"),
+		tgbotapi.NewKeyboardButton("70%"),
+		tgbotapi.NewKeyboardButton("80%"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("90%"),
+		tgbotapi.NewKeyboardButton("100%"),
+		toStart,
+	),
+)
+var adhdSymptomsKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Очень Редко / Никогда (Нет)"),
+		tgbotapi.NewKeyboardButton("Редко (Скорее нет)"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Иногда (Средне)"),
+		tgbotapi.NewKeyboardButton("Часто (Скорее да)"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Очень Часто / Всегда (Да)"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
 		toStart,
 	),
 )

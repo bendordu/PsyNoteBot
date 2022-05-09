@@ -82,6 +82,29 @@ func SelectOldResult(chatID int64, typesTest TypesTest, db *sql.DB) (str string)
 	return str
 }
 
+func SelectTests(typesTest TypesTest, db *sql.DB) (namesRus []string) {
+	rows, err := db.Query(fmt.Sprintf(`SELECT name FROM test ORDER BY name;`))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var name string
+	for rows.Next() {
+		if err := rows.Scan(&name); err != nil {
+			log.Fatal(err)
+		}
+		for _, typeTest := range typesTest.TestTypes {
+			for _, test := range typeTest.Tests {
+				if test.TestName == name {
+					namesRus = append(namesRus, test.TestNameRus)
+				}
+			}
+		}
+	}
+	defer rows.Close()
+	return namesRus
+}
+
 /*
 CREATE TABLE test_result(
     t_result_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
