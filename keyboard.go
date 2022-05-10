@@ -19,6 +19,15 @@ var backKeyboard = tgbotapi.NewReplyKeyboard(
 	),
 )
 
+var errKeyboard = tgbotapi.NewReplyKeyboard(
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Я понял. Продолжить тест"),
+	),
+	tgbotapi.NewKeyboardButtonRow(
+		toStart,
+	),
+)
+
 var testKeyboard = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButton("Тревога"),

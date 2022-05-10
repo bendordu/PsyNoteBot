@@ -58,7 +58,7 @@ func allTests(chatID int64, typesTest TypesTest, db *sql.DB, bot *tgbotapi.BotAP
 	testsList := SelectTests(typesTest, db)
 	var testsNameRus [][]tgbotapi.InlineKeyboardButton
 
-	msg := tgbotapi.NewMessage(chatID, "Список всех тестов")
+	msg := tgbotapi.NewMessage(chatID, "Нажмите на выбранный тест из списка")
 
 	for _, test := range testsList {
 		testsNameRus = append(testsNameRus, tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(test, test)))

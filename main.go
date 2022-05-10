@@ -70,8 +70,10 @@ func main() {
 
 		if text == "/start" || text == "Выход 🚪" { //Нулевой уровень 0 - старт
 
-			psyParams.text = "Здравствуйте!\nЗдесь собраны психологические тесты, которые помогут определить ваше психическое состояние."
-			change(psyParams)
+			if text == "/start" {
+				psyParams.text = "👋🏼 Здравствуйте!\nЗдесь собраны психологические тесты, которые помогут определить ваше психическое состояние."
+				change(psyParams)
+			}
 
 			setZero(chatID, userD)
 
@@ -81,11 +83,16 @@ func main() {
 
 			userD[chatID]["level"] = 1
 
-		} else if text == "Прошлые результаты 🕔" || text == "/show_results" {
+		} else if text == "Прошлые результаты 🕔" || text == "/results" {
 
-			psyParams.text = SelectOldResult(chatID, typesTest, db)
-			if len(psyParams.text) == 0 {
-				psyParams.text = "🦥Пока результатов нет.\nПройдите любой из тестов до конца, и тогда они отобразятся здесь."
+			str := SelectOldResult(chatID, typesTest, db)
+			psyParams.keyboard = backKeyboard
+
+			if len(str) == 0 {
+				psyParams.text = "🦥 Пока результатов нет.\nПройдите любой из тестов до конца, и тогда они отобразятся здесь."
+
+			} else {
+				psyParams.text = "📅<b>Ваши результаты:</b>\n\n" + SelectOldResult(chatID, typesTest, db)
 			}
 			change(psyParams)
 
@@ -93,12 +100,30 @@ func main() {
 
 			setZero(chatID, userD)
 			userD[chatID]["level"] = 2
+			psyParams.keyboard = backKeyboard
+			psyParams.text = "⬇️"
+			change(psyParams)
 			allTests(chatID, typesTest, db, bot)
 
-		} else if text == "/about_author" {
+		} else if text == "/error" {
 
 			setZero(chatID, userD)
-			psyParams.text = "Меня зовут Дарья, я — создатель этого бота, психолог, психиатр. Вы всегда можете обратиться ко мне, чтобы получить консультацию специалиста. Пишите: @stayclosetonight\n\nЧтобы поблагодарить меня, вы можете оставить отзыв на <a href=\"https://www.b17.ru/daryadudinaa/\">сайте специалистов</a> или отправить пожертвования на <a href=\"https://yoomoney.ru/to/4100117806595904\">развитие проекта</a>."
+			psyParams.text = "⚠️Если вы обнаружили ошибку, опишите ее в сообщении @stayclosetonight. Укажите, на каком этапе работы бота она возникла."
+			psyParams.keyboard = backKeyboard
+			change(psyParams)
+
+		} else if text == "/description" {
+
+			setZero(chatID, userD)
+			psyParams.text = "Бот содержит психологические тесты по разным категориям и позволяет отслеживать психическое состояние в динамике. Подходит как для самостоятельного прохождения, так и для использования врачами.\n\n❕Помните, что онлайн-тесты не предназначены для самостоятельной постановки диагноза. В случае любых сомнений обратитесь к специалисту.\n\nДля навигации по боту используйте команды из меню.\n\nЕсли вам интересна тема психического здоровья, подписывайтесь на <a href=\"https://t.me/parrhesia_psy\">канал</a>"
+			psyParams.keyboard = backKeyboard
+			change(psyParams)
+
+		} else if text == "/author" {
+
+			setZero(chatID, userD)
+			psyParams.text = "👩‍💻Меня зовут Дарья, я — создатель этого бота, психолог, психиатр. Вы всегда можете обратиться ко мне, чтобы получить консультацию специалиста. Пишите: @stayclosetonight\n\n❤️Чтобы поблагодарить меня, вы можете оставить отзыв на <a href=\"https://www.b17.ru/daryadudinaa/\">сайте специалистов</a> или отправить пожертвования на <a href=\"https://yoomoney.ru/to/4100117806595904\">развитие проекта</a>.\n\nЕсли вам интересна тема психического здоровья, подписывайтесь на <a href=\"https://t.me/parrhesia_psy\">канал</a>"
+			psyParams.keyboard = backKeyboard
 			change(psyParams)
 
 		} else if userD[chatID]["level"] == 1 { //Переходим на следующий уровень 1 - выбор типа тестов
@@ -122,7 +147,7 @@ func main() {
 				userD[chatID]["level"] = 3
 			}
 
-		} else if userD[chatID]["level"] == 3 { //Подсчет баллов при каждом новом выборе
+		} else if userD[chatID]["level"] == 3 || text == "Я понял. Продолжить тест" { //Подсчет баллов при каждом новом выборе
 
 			/*else {
 				if len(testD[chatID].Scales) != 0 {
@@ -131,17 +156,13 @@ func main() {
 				}
 			}*/
 			timeAnsw[chatID]["timeUserAnsw"] = update.Message.Time()
-
-			log.Println(update.Message.Date)
-
-			log.Println(timeAnsw[chatID]["timeUserAnsw"], timeAnsw[chatID]["timeBotAnsw"].Round(time.Second))
-
 			if timeAnsw[chatID]["timeUserAnsw"].Before(timeAnsw[chatID]["timeBotAnsw"].Round(time.Second)) {
 
 				log.Println("Введено несколько ответов подряд на один вопрос")
-				psyParams.text = "❗Не торопитесь."
-				psyParams.keyboard = typeTestKeyboard[testD[chatID].NameEng]
+				psyParams.text = "❗Не торопитесь. Еще раз прочитайте вопрос и ответьте заново."
+				psyParams.keyboard = errKeyboard
 				change(psyParams)
+				userD[chatID]["number"]--
 
 			} else {
 
@@ -151,13 +172,17 @@ func main() {
 				)
 
 				if userD[chatID]["number"] != 0 {
-					score, err = countScore(testD, chatID, text, userD[chatID]["number"])
-					userD[chatID]["score"] += score
-					if err != nil {
-						log.Println(err)
-						psyParams.text = "❗Выберите вариант ответа, нажав кнопку на клавиатуре."
-						psyParams.keyboard = typeTestKeyboard[testD[chatID].NameEng]
-						change(psyParams)
+
+					if text != "Я понял. Продолжить тест" {
+						score, err = countScore(testD, chatID, text, userD[chatID]["number"])
+						userD[chatID]["score"] += score
+
+						if err != nil {
+							log.Println(err)
+							psyParams.text = "❗Выберите вариант ответа, нажав кнопку на клавиатуре."
+							psyParams.keyboard = typeTestKeyboard[testD[chatID].NameEng]
+							change(psyParams)
+						}
 					}
 
 				} else if text != "Пройти тест" {
@@ -168,11 +193,9 @@ func main() {
 				if userD[chatID]["number"] < len(testD[chatID].Questions) {
 
 					if err == nil {
-						//time.Sleep(time.Second)
 						timeAnsw[chatID]["timeBotAnsw"] = time.Now()
 						numberQuestionTest(psyParams, testD, chatID, userD[chatID]["number"])
 						userD[chatID]["number"] += 1
-
 					}
 
 				} else {
@@ -195,3 +218,20 @@ func main() {
 		}
 	}
 }
+
+/*start - Вернуться к началу
+description - Что может бот
+tests - Вывести список тестов
+results - Показать мои результаты
+error - Сообщить об ошибке
+author - О создателе бота*/
+
+/*📑 психологические тесты по категориям:
+-тревога
+-коммуникация
+-зависимости
+-эмоции
+-депрессия
+-мотивация
+
+Если вам интересна тема психического здоровья, подписывайтесь на <a href=\"https://t.me/parrhesia_psy\">канал</a>*/
