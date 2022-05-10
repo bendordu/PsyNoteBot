@@ -23,7 +23,7 @@ func tbot() (bot *tgbotapi.BotAPI) {
 		log.Panic(err)
 	}
 
-	bot.Debug = true
+	bot.Debug = false
 	return bot
 }
 
